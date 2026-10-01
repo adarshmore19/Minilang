@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniLang 2.0 Studio | Language Workbench &amp; Virtual Machine</title>
+    <title>MiniLang Studio | Language Workbench &amp; Virtual Machine</title>
     <meta name="description" content="Professional lightweight programming language workbench. Features bytecode compiler, stack virtual machine, object-oriented runtime, and interactive editor.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,23 +20,29 @@
                     <span>ML</span>
                 </div>
                 <div class="brand-info">
-                    <span class="brand-title">MiniLang <span class="badge-version">2.0</span></span>
+                    <span class="brand-title">MiniLang</span>
                     <span class="brand-subtitle">Bytecode Studio &amp; Virtual Machine</span>
                 </div>
             </div>
 
             <div class="nav-actions">
-                <div class="preset-selector">
-                    <label for="example-select" class="visually-hidden">Select Example</label>
-                    <select id="example-select" aria-label="Load code example">
-                        <option value="kid_friendly">Kid-Friendly Syntax</option>
-                        <option value="oop_classes">Object-Oriented Classes</option>
-                        <option value="algorithms">High-Speed Algorithms</option>
-                        <option value="try_catch">Exception Handling (Try / Catch)</option>
-                        <option value="multiline_str">Multi-line Strings</option>
-                        <option value="turtle_art">ASCII Canvas &amp; Shapes</option>
-                    </select>
-                </div>
+                <button id="theme-toggle-btn" class="icon-btn theme-toggle" title="Toggle calming dark theme">
+                    <svg id="theme-icon-moon" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="theme-icon-sun" class="btn-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <span id="theme-label">Dark Theme</span>
+                </button>
 
                 <button id="run-btn" class="btn btn-primary" title="Execute script (Ctrl+Enter)">
                     <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -69,12 +75,12 @@
 
         <!-- Main Workspace -->
         <main class="workspace">
-            <!-- Left: Code Editor Pane -->
+            <!-- Left: Code Editor Pane with Syntax Highlighting Overlay -->
             <section class="editor-pane" aria-label="Code Editor">
                 <div class="panel-header">
                     <div class="panel-title">
                         <span class="file-label">main.ml</span>
-                        <span class="badge-lang">MiniLang 2.0</span>
+                        <span class="badge-lang">MiniLang</span>
                     </div>
                     <div class="panel-tools">
                         <button id="format-btn" class="icon-btn" title="Clear Code">
@@ -85,7 +91,10 @@
 
                 <div class="editor-wrapper">
                     <div class="line-numbers" id="line-numbers" aria-hidden="true">1</div>
-                    <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Write MiniLang code here..."></textarea>
+                    <div class="code-container">
+                        <pre id="highlight-layer" aria-hidden="true"><code id="highlight-code"></code></pre>
+                        <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Write MiniLang code here..."></textarea>
+                    </div>
                 </div>
 
                 <div class="editor-footer">
@@ -115,7 +124,7 @@
                         <span>Syntax Tree</span>
                     </button>
                     <button class="tab-btn" data-tab="cheat-view">
-                        <span>Documentation</span>
+                        <span>Syntax Reference</span>
                     </button>
                 </div>
 
@@ -132,7 +141,7 @@
                                 <span>Clear</span>
                             </button>
                         </div>
-                        <pre id="console-output" class="terminal-view"><span class="terminal-intro">Welcome to MiniLang 2.0 Web Studio.
+                        <pre id="console-output" class="terminal-view"><span class="terminal-intro">Welcome to MiniLang Web Studio.
 Press "Run" (or Ctrl+Enter) to execute your program.</span></pre>
                     </div>
 
@@ -154,45 +163,151 @@ Press "Run" (or Ctrl+Enter) to execute your program.</span></pre>
                         <pre id="ast-output" class="terminal-view code-font">// Click "AST" to inspect parsed AST statements.</pre>
                     </div>
 
-                    <!-- Tab 4: Cheatsheet / Reference -->
+                    <!-- Tab 4: Searchable Syntax Documentation -->
                     <div id="cheat-view" class="tab-panel">
                         <div class="reference-content">
-                            <h3>MiniLang 2.0 Syntax Reference</h3>
-                            <div class="reference-grid">
-                                <div class="ref-card">
-                                    <h4>Kid-Friendly English Syntax</h4>
-                                    <code>score = 10;<br>score = score + 5;<br>score = score * 2;<br>show "Final: " + str(score);<br>repeat 3 times {<br>&nbsp;&nbsp;say "Hello";<br>}</code>
-                                    <button class="insert-snippet-btn" data-snippet="score = 10;&#10;score = score + 5;&#10;score = score * 2;&#10;show &quot;Final score: &quot; + str(score);&#10;repeat 3 times {&#10;    say &quot;MiniLang is simple and fast.&quot;;&#10;}">Insert Snippet</button>
+                            <div class="docs-header">
+                                <div class="search-box">
+                                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                    <input type="text" id="syntax-search-input" placeholder="Search syntax (e.g. variable, loop, class, if, array, math, file, try)..." aria-label="Search syntax">
+                                    <span id="search-count" class="search-count-badge">12 topics</span>
+                                </div>
+                            </div>
+
+                            <div class="reference-grid" id="syntax-cards-container">
+                                <!-- Card 1: Variables -->
+                                <div class="ref-card" data-keywords="variable let assign define name value mutability">
+                                    <div class="ref-card-header">
+                                        <h4>Variables &amp; Assignment</h4>
+                                        <span class="topic-tag">Core</span>
+                                    </div>
+                                    <p class="ref-desc">Declare with <code>let</code> or assign dynamically without declaration. Reassign with arithmetic updates.</p>
+                                    <code>let score = 100;&#10;score = score + 25;&#10;name = &quot;Alex&quot;;&#10;say name;&#10;show score;</code>
+                                    <button class="insert-snippet-btn" data-snippet="let score = 100;&#10;score = score + 25;&#10;name = &quot;Alex&quot;;&#10;say name;&#10;show score;">Insert into Compiler</button>
                                 </div>
 
-                                <div class="ref-card">
-                                    <h4>Object-Oriented Classes</h4>
-                                    <code>class Point {<br>&nbsp;&nbsp;init(x, y) {<br>&nbsp;&nbsp;&nbsp;&nbsp;this.x = x;<br>&nbsp;&nbsp;&nbsp;&nbsp;this.y = y;<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;show() {<br>&nbsp;&nbsp;&nbsp;&nbsp;print("(" + str(this.x) + ")");<br>&nbsp;&nbsp;}<br>}</code>
-                                    <button class="insert-snippet-btn" data-snippet="class Vector {&#10;    init(x, y) {&#10;        this.x = x;&#10;        this.y = y;&#10;    }&#10;    length() {&#10;        return sqrt(this.x * this.x + this.y * this.y);&#10;    }&#10;}&#10;let v = Vector(3, 4);&#10;print(&quot;Length: &quot; + str(v.length()));">Insert Snippet</button>
+                                <!-- Card 2: Kid-Friendly Loops -->
+                                <div class="ref-card" data-keywords="repeat times loop kid friendly simple iteration say show">
+                                    <div class="ref-card-header">
+                                        <h4>Kid-Friendly Repeat Loops</h4>
+                                        <span class="topic-tag">Control</span>
+                                    </div>
+                                    <p class="ref-desc">Execute a block of code a set number of times without complex loop indices.</p>
+                                    <code>repeat 4 times {&#10;    say &quot;MiniLang is simple and fast.&quot;;&#10;}</code>
+                                    <button class="insert-snippet-btn" data-snippet="repeat 4 times {&#10;    say &quot;MiniLang is simple and fast.&quot;;&#10;}">Insert into Compiler</button>
                                 </div>
 
-                                <div class="ref-card">
-                                    <h4>Try / Catch Exception Handling</h4>
-                                    <code>try {<br>&nbsp;&nbsp;let x = 10 / 0;<br>} catch (err) {<br>&nbsp;&nbsp;print("Caught error: " + err);<br>}</code>
-                                    <button class="insert-snippet-btn" data-snippet="try {&#10;    let res = 10 / 0;&#10;} catch (e) {&#10;    print(&quot;Successfully handled error: &quot; + e);&#10;}">Insert Snippet</button>
+                                <!-- Card 3: Conditionals -->
+                                <div class="ref-card" data-keywords="if else condition logic and or not is boolean compare">
+                                    <div class="ref-card-header">
+                                        <h4>Conditionals &amp; Logic</h4>
+                                        <span class="topic-tag">Logic</span>
+                                    </div>
+                                    <p class="ref-desc">Branches with <code>if</code> and <code>else</code>. Parentheses optional. Uses <code>and</code>, <code>or</code>, <code>not</code>, <code>is</code>.</p>
+                                    <code>let score = 85;&#10;if score &gt;= 80 and not (score is 100) {&#10;    say &quot;Great score!&quot;;&#10;} else {&#10;    say &quot;Keep going!&quot;;&#10;}</code>
+                                    <button class="insert-snippet-btn" data-snippet="let score = 85;&#10;if score &gt;= 80 and not (score is 100) {&#10;    say &quot;Great score!&quot;;&#10;} else {&#10;    say &quot;Keep going!&quot;;&#10;}">Insert into Compiler</button>
                                 </div>
 
-                                <div class="ref-card">
-                                    <h4>Multi-line Strings</h4>
-                                    <code>let banner = """<br>+-----------------+<br>| MiniLang 2.0    |<br>+-----------------+<br>""";<br>print(banner);</code>
-                                    <button class="insert-snippet-btn" data-snippet="let text = &quot;&quot;&quot;&#10;MiniLang 2.0:&#10;  - High-performance bytecode compiler&#10;  - Stack virtual machine&#10;  - Memory-safe execution&#10;&quot;&quot;&quot;;&#10;print(text);">Insert Snippet</button>
+                                <!-- Card 4: Functions -->
+                                <div class="ref-card" data-keywords="function fn def return call parameter argument">
+                                    <div class="ref-card-header">
+                                        <h4>Functions</h4>
+                                        <span class="topic-tag">Functions</span>
+                                    </div>
+                                    <p class="ref-desc">Define reusable subroutines using <code>fn</code> or <code>def</code> with parameters and return values.</p>
+                                    <code>fn addNumbers(a, b) {&#10;    return a + b;&#10;}&#10;let total = addNumbers(15, 25);&#10;print(&quot;Total: &quot; + str(total));</code>
+                                    <button class="insert-snippet-btn" data-snippet="fn addNumbers(a, b) {&#10;    return a + b;&#10;}&#10;let total = addNumbers(15, 25);&#10;print(&quot;Total: &quot; + str(total));">Insert into Compiler</button>
                                 </div>
 
-                                <div class="ref-card">
-                                    <h4>Algorithms and Sorting</h4>
-                                    <code>let nums = [5, 2, 8, 1, 9];<br>let sorted = sort(nums);<br>print(sorted);</code>
-                                    <button class="insert-snippet-btn" data-snippet="let data = [42, 17, 88, 3, 99, 12];&#10;print(&quot;Original: &quot; + str(data));&#10;print(&quot;Sorted:   &quot; + str(sort(data)));&#10;print(&quot;Median:   &quot; + str(median(data)));">Insert Snippet</button>
+                                <!-- Card 5: Classes & OOP -->
+                                <div class="ref-card" data-keywords="class oop object method constructor init this self instance">
+                                    <div class="ref-card-header">
+                                        <h4>Classes &amp; OOP</h4>
+                                        <span class="topic-tag">OOP</span>
+                                    </div>
+                                    <p class="ref-desc">Object-oriented classes with <code>class</code>, constructor <code>init</code>, methods, and <code>this</code> or <code>self</code>.</p>
+                                    <code>class Vector2D {&#10;    init(x, y) {&#10;        this.x = x;&#10;        this.y = y;&#10;    }&#10;    magnitude() {&#10;        return sqrt(this.x * this.x + this.y * this.y);&#10;    }&#10;}&#10;let v = Vector2D(3, 4);&#10;print(&quot;Magnitude: &quot; + str(v.magnitude()));</code>
+                                    <button class="insert-snippet-btn" data-snippet="class Vector2D {&#10;    init(x, y) {&#10;        this.x = x;&#10;        this.y = y;&#10;    }&#10;    magnitude() {&#10;        return sqrt(this.x * this.x + this.y * this.y);&#10;    }&#10;}&#10;let v = Vector2D(3, 4);&#10;print(&quot;Magnitude: &quot; + str(v.magnitude()));">Insert into Compiler</button>
                                 </div>
 
-                                <div class="ref-card">
-                                    <h4>Mathematical Built-ins</h4>
-                                    <code>let r = sqrt(144);<br>let p = pow(2, 8);<br>print(r);<br>print(p);</code>
-                                    <button class="insert-snippet-btn" data-snippet="print(&quot;Square root of 256: &quot; + str(sqrt(256)));&#10;print(&quot;2 to power 10:      &quot; + str(pow(2, 10)));&#10;print(&quot;Round 3.84:         &quot; + str(round(3.84)));">Insert Snippet</button>
+                                <!-- Card 6: Dynamic Arrays -->
+                                <div class="ref-card" data-keywords="array list element index push pop len collection">
+                                    <div class="ref-card-header">
+                                        <h4>Arrays &amp; Lists</h4>
+                                        <span class="topic-tag">Data</span>
+                                    </div>
+                                    <p class="ref-desc">Dynamic collections indexed with <code>arr[i]</code>. Built-ins include <code>push</code>, <code>pop</code>, and <code>len</code>.</p>
+                                    <code>let items = [10, 20, 30];&#10;push(items, 40);&#10;print(&quot;Length: &quot; + str(len(items)));&#10;print(&quot;First:  &quot; + str(items[0]));&#10;print(&quot;All:    &quot; + str(items));</code>
+                                    <button class="insert-snippet-btn" data-snippet="let items = [10, 20, 30];&#10;push(items, 40);&#10;print(&quot;Length: &quot; + str(len(items)));&#10;print(&quot;First:  &quot; + str(items[0]));&#10;print(&quot;All:    &quot; + str(items));">Insert into Compiler</button>
+                                </div>
+
+                                <!-- Card 7: Dictionaries -->
+                                <div class="ref-card" data-keywords="dictionary map hashmap key value object has keys values">
+                                    <div class="ref-card-header">
+                                        <h4>Dictionaries (HashMaps)</h4>
+                                        <span class="topic-tag">Data</span>
+                                    </div>
+                                    <p class="ref-desc">Key-value mappings with <code>{ "key": val }</code>. Inspect with <code>has</code>, <code>keys</code>, <code>values</code>, and <code>len</code>.</p>
+                                    <code>let user = { &quot;name&quot;: &quot;Ada&quot;, &quot;score&quot;: 95 };&#10;user[&quot;role&quot;] = &quot;Engineer&quot;;&#10;print(&quot;Name: &quot; + user[&quot;name&quot;]);&#10;print(&quot;Keys: &quot; + str(keys(user)));&#10;print(&quot;Has role? &quot; + str(has(user, &quot;role&quot;)));</code>
+                                    <button class="insert-snippet-btn" data-snippet="let user = { &quot;name&quot;: &quot;Ada&quot;, &quot;score&quot;: 95 };&#10;user[&quot;role&quot;] = &quot;Engineer&quot;;&#10;print(&quot;Name: &quot; + user[&quot;name&quot;]);&#10;print(&quot;Keys: &quot; + str(keys(user)));&#10;print(&quot;Has role? &quot; + str(has(user, &quot;role&quot;)));">Insert into Compiler</button>
+                                </div>
+
+                                <!-- Card 8: Try / Catch -->
+                                <div class="ref-card" data-keywords="try catch exception error handle safe panic recover">
+                                    <div class="ref-card-header">
+                                        <h4>Exception Handling (Try / Catch)</h4>
+                                        <span class="topic-tag">Safety</span>
+                                    </div>
+                                    <p class="ref-desc">Safely intercept division by zero, invalid indexes, and file errors without halting execution.</p>
+                                    <code>try {&#10;    let res = 100 / 0;&#10;} catch (err) {&#10;    print(&quot;Handled error: &quot; + err);&#10;}&#10;print(&quot;Program continues safely.&quot;);</code>
+                                    <button class="insert-snippet-btn" data-snippet="try {&#10;    let res = 100 / 0;&#10;} catch (err) {&#10;    print(&quot;Handled error: &quot; + err);&#10;}&#10;print(&quot;Program continues safely.&quot;);">Insert into Compiler</button>
+                                </div>
+
+                                <!-- Card 9: Multi-line Strings -->
+                                <div class="ref-card" data-keywords="string text multiline quotes raw str banner template">
+                                    <div class="ref-card-header">
+                                        <h4>Multi-line Raw Strings</h4>
+                                        <span class="topic-tag">Strings</span>
+                                    </div>
+                                    <p class="ref-desc">Triple-quoted strings <code>&quot;&quot;&quot; ... &quot;&quot;&quot;</code> retain newlines and formatting verbatim.</p>
+                                    <code>let banner = &quot;&quot;&quot;&#10;+-----------------------------+&#10;| MiniLang Language Workbench |&#10;+-----------------------------+&#10;&quot;&quot;&quot;;&#10;print(banner);</code>
+                                    <button class="insert-snippet-btn" data-snippet="let banner = &quot;&quot;&quot;&#10;+-----------------------------+&#10;| MiniLang Language Workbench |&#10;+-----------------------------+&#10;&quot;&quot;&quot;;&#10;print(banner);">Insert into Compiler</button>
+                                </div>
+
+                                <!-- Card 10: File I/O -->
+                                <div class="ref-card" data-keywords="file io read write append exists delete disk filesystem">
+                                    <div class="ref-card-header">
+                                        <h4>File I/O Built-ins</h4>
+                                        <span class="topic-tag">System</span>
+                                    </div>
+                                    <p class="ref-desc">Read and write files directly: <code>writeFile</code>, <code>readFile</code>, <code>appendFile</code>, <code>fileExists</code>, <code>deleteFile</code>.</p>
+                                    <code>writeFile(&quot;demo.txt&quot;, &quot;Hello from MiniLang!\n&quot;);&#10;appendFile(&quot;demo.txt&quot;, &quot;Appended log line.\n&quot;);&#10;print(readFile(&quot;demo.txt&quot;));&#10;deleteFile(&quot;demo.txt&quot;);</code>
+                                    <button class="insert-snippet-btn" data-snippet="writeFile(&quot;demo.txt&quot;, &quot;Hello from MiniLang!\n&quot;);&#10;appendFile(&quot;demo.txt&quot;, &quot;Appended log line.\n&quot;);&#10;print(readFile(&quot;demo.txt&quot;));&#10;deleteFile(&quot;demo.txt&quot;);">Insert into Compiler</button>
+                                </div>
+
+                                <!-- Card 11: Algorithms & Statistics -->
+                                <div class="ref-card" data-keywords="algo sort binarysearch mean median sum reverse range statistics">
+                                    <div class="ref-card-header">
+                                        <h4>Algorithms &amp; Statistics</h4>
+                                        <span class="topic-tag">Algorithms</span>
+                                    </div>
+                                    <p class="ref-desc">Fast standard library routines: <code>sort</code>, <code>mean</code>, <code>median</code>, <code>sum</code>, <code>reverse</code>, <code>range</code>, <code>binarySearch</code>.</p>
+                                    <code>let nums = [42, 17, 88, 3, 99, 12];&#10;print(&quot;Original: &quot; + str(nums));&#10;print(&quot;Sorted:   &quot; + str(sort(nums)));&#10;print(&quot;Mean:     &quot; + str(mean(nums)));&#10;print(&quot;Median:   &quot; + str(median(nums)));</code>
+                                    <button class="insert-snippet-btn" data-snippet="let nums = [42, 17, 88, 3, 99, 12];&#10;print(&quot;Original: &quot; + str(nums));&#10;print(&quot;Sorted:   &quot; + str(sort(nums)));&#10;print(&quot;Mean:     &quot; + str(mean(nums)));&#10;print(&quot;Median:   &quot; + str(median(nums)));">Insert into Compiler</button>
+                                </div>
+
+                                <!-- Card 12: Math Built-ins -->
+                                <div class="ref-card" data-keywords="math number float integer sqrt pow abs round random sin cos">
+                                    <div class="ref-card-header">
+                                        <h4>Mathematical Built-ins</h4>
+                                        <span class="topic-tag">Math</span>
+                                    </div>
+                                    <p class="ref-desc">Built-in numeric functions: <code>sqrt</code>, <code>pow</code>, <code>abs</code>, <code>round</code>, <code>floor</code>, <code>ceil</code>, <code>sin</code>, <code>cos</code>, <code>random</code>.</p>
+                                    <code>print(&quot;Square root 256: &quot; + str(sqrt(256)));&#10;print(&quot;2 to power 10:   &quot; + str(pow(2, 10)));&#10;print(&quot;Round 4.75:      &quot; + str(round(4.75)));</code>
+                                    <button class="insert-snippet-btn" data-snippet="print(&quot;Square root 256: &quot; + str(sqrt(256)));&#10;print(&quot;2 to power 10:   &quot; + str(pow(2, 10)));&#10;print(&quot;Round 4.75:      &quot; + str(round(4.75)));">Insert into Compiler</button>
                                 </div>
                             </div>
                         </div>

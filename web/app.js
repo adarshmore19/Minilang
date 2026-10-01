@@ -1,190 +1,43 @@
-// MiniLang 2.0 Web Studio Application Logic
+// MiniLang Web Studio Application Logic
 
-const EXAMPLES = {
-    kid_friendly: `// ========================================================
-// MiniLang 2.0: Kid-Friendly English Syntax
-// Clear, natural language keywords and friendly loops
-// ========================================================
+const DEFAULT_SCRIPT = `// MiniLang Language Workbench
+// Write your code here and press Run (Ctrl+Enter)
 
 let score = 100;
 show "Initial Score: " + str(score);
 
-// Easy natural arithmetic
+// Kid-friendly natural syntax
 score = score + 25;
 show "After adding 25: " + str(score);
-
-score = score - 10;
-show "After subtracting 10: " + str(score);
 
 score = score * 2;
 show "After doubling: " + str(score);
 
-score = score / 5;
-show "After dividing by 5: " + str(score);
-
-print("\n--- Kid-Friendly Repeat Loops ---");
+// Repeat loops
+print("\nExecuting repeat loop:");
 let step = 1;
-repeat 4 times {
-    say "Loop iteration #" + str(step) + ": MiniLang is simple and fast.";
+repeat 3 times {
+    say "Loop step " + str(step) + ": MiniLang is simple and fast.";
     step = step + 1;
 }
-`,
 
-    oop_classes: `// ========================================================
-// MiniLang 2.0: Object-Oriented Programming
-// Classes, Constructors, 'this' / 'self', and Methods
-// ========================================================
-
-class Vector2D {
-    init(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    magnitude() {
-        return sqrt(this.x * this.x + this.y * this.y);
-    }
-
-    add(other) {
-        return Vector2D(this.x + other.x, this.y + other.y);
-    }
-
-    show() {
-        print("(" + str(round(this.x)) + ", " + str(round(this.y)) + ")");
-    }
+// Functions & Safe math
+fn calculateBonus(points) {
+    return points * 1.5;
 }
 
-let v1 = Vector2D(3.0, 4.0);
-print("Vector v1 magnitude (expected 5.0): " + str(v1.magnitude()));
-
-let v2 = Vector2D(7.0, 6.0);
-let v3 = v1.add(v2);
-
-print("v3 = v1 + v2:");
-v3.show();
-`,
-
-    algorithms: `// ========================================================
-// MiniLang 2.0: High-Speed Algorithms & Dynamic Arrays
-// ========================================================
-
-// Recursive Fibonacci with dynamic array memoization
-fn fib(n) {
-    if (n <= 1) return n;
-    return fib(n - 1) + fib(n - 2);
-}
-
-print("Computing Fibonacci values:");
-let i = 0;
-while (i <= 10) {
-    print("fib(" + str(i) + ") = " + str(fib(i)));
-    i = i + 1;
-}
-
-// Array statistics and sorting
-let nums = [42, 17, 88, 3, 99, 12, 55];
-print("\nOriginal array: " + str(nums));
-print("Array length:   " + str(len(nums)));
-print("Sorted array:   " + str(sort(nums)));
-print("Max value:      " + str(max(nums)));
-print("Min value:      " + str(min(nums)));
-print("Mean value:     " + str(mean(nums)));
-print("Median value:   " + str(median(nums)));
-`,
-
-    try_catch: `// ========================================================
-// MiniLang 2.0: Exception Handling (Try / Catch)
-// ========================================================
-
-print("=== Safe Exception Handling Demonstration ===");
-
-// 1. Catching Division by Zero
-try {
-    print("Executing division 100 / 0...");
-    let result = 100 / 0;
-    print("This will not execute.");
-} catch (err) {
-    print("Handled runtime error: " + err);
-}
-
-// 2. Function with internal recovery
-fn safeDivide(a, b) {
-    try {
-        return a / b;
-    } catch (e) {
-        print("safeDivide caught: " + e);
-        return 0;
-    }
-}
-
-print("\nsafeDivide(50, 5) = " + str(safeDivide(50, 5)));
-print("safeDivide(50, 0) = " + str(safeDivide(50, 0)));
-print("\nSystem state: Stable and running normally.");
-`,
-
-    multiline_str: `// ========================================================
-// MiniLang 2.0: Triple-Quoted Multi-line Raw Strings
-// ========================================================
-
-let banner = """
-+---------------------------------------------+
-| MiniLang 2.0 Professional Workbench         |
-| High-performance bytecode compiler and VM   |
-+---------------------------------------------+
-""";
-
-print(banner);
-
-let info = """
-Core Features:
-  - Bytecode Virtual Machine with zero native dependencies
-  - Object-Oriented Architecture (Classes & Methods)
-  - Kid-Friendly Natural English Syntax
-  - Safe Memory Management with Call Stack Limits
-  - 2D Drawing, Chart Plotting, and Fast Algorithms
-""";
-
-print(info);
-`,
-
-    turtle_art: `// ========================================================
-// MiniLang 2.0: ASCII Canvas & Shape Rendering
-// ========================================================
-
-fn drawBox(w, h) {
-    let y = 0;
-    while (y < h) {
-        let line = "";
-        let x = 0;
-        while (x < w) {
-            if (y == 0 || y == h - 1) {
-                line = line + "#";
-            } else {
-                if (x == 0 || x == w - 1) {
-                    line = line + "#";
-                } else {
-                    line = line + " ";
-                }
-            }
-            x = x + 1;
-        }
-        print(line);
-        y = y + 1;
-    }
-}
-
-print("Drawing 16x8 ASCII frame:");
-drawBox(16, 8);
-`
-};
+let bonus = calculateBonus(score);
+print("\nCalculated bonus: " + str(bonus));
+`;
 
 // DOM Elements
 const editor = document.getElementById('code-editor');
+const highlightLayer = document.getElementById('highlight-layer');
+const highlightCode = document.getElementById('highlight-code');
 const lineNumbers = document.getElementById('line-numbers');
 const runBtn = document.getElementById('run-btn');
 const bytecodeBtn = document.getElementById('bytecode-btn');
 const astBtn = document.getElementById('ast-btn');
-const exampleSelect = document.getElementById('example-select');
 const consoleOutput = document.getElementById('console-output');
 const bytecodeOutput = document.getElementById('bytecode-output');
 const astOutput = document.getElementById('ast-output');
@@ -197,12 +50,77 @@ const charCount = document.getElementById('char-count');
 const formatBtn = document.getElementById('format-btn');
 const clearConsoleBtn = document.getElementById('clear-console-btn');
 
-// Initialize with kid-friendly example
-editor.value = EXAMPLES.kid_friendly;
-updateLineNumbers();
-updateStats();
+// Theme Toggle Elements
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const themeIconMoon = document.getElementById('theme-icon-moon');
+const themeIconSun = document.getElementById('theme-icon-sun');
+const themeLabel = document.getElementById('theme-label');
 
-// Synchronize line numbers and cursor tracker
+// Documentation Search Elements
+const searchInput = document.getElementById('syntax-search-input');
+const searchCount = document.getElementById('search-count');
+const syntaxCards = document.querySelectorAll('.ref-card');
+
+// Initialize Editor with Default Script
+editor.value = DEFAULT_SCRIPT;
+updateEditorView();
+
+// -----------------------------------------------------------------------------
+// 1. Syntax Highlighting Engine
+// -----------------------------------------------------------------------------
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function renderSyntaxHighlighting(text) {
+    const tokenRegex = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("""[\s\S]*?"""|"(?:\\.|[^"\\])*")|(\b(?:let|fn|def|class|if|else|while|repeat|times|for|in|return|try|catch|import|say|show|print|this|self)\b)|(\b(?:and|or|not|is|true|false|null)\b)|(\b\d+(?:\.\d+)?\b)|(\b(?:range|sort|mean|median|sum|reverse|binarySearch|has|keys|values|len|push|pop|sqrt|pow|abs|round|floor|ceil|sin|cos|random|clock|readFile|writeFile|appendFile|fileExists|deleteFile)\b)/g;
+
+    let result = "";
+    let lastIndex = 0;
+    let match;
+
+    while ((match = tokenRegex.exec(text)) !== null) {
+        result += escapeHtml(text.slice(lastIndex, match.index));
+
+        if (match[1]) {
+            // Comment
+            result += `<span class="token-comment">${escapeHtml(match[1])}</span>`;
+        } else if (match[2]) {
+            // String (single or multi-line)
+            result += `<span class="token-string">${escapeHtml(match[2])}</span>`;
+        } else if (match[3]) {
+            // Keyword
+            result += `<span class="token-keyword">${escapeHtml(match[3])}</span>`;
+        } else if (match[4]) {
+            // Operator / Boolean
+            result += `<span class="token-operator">${escapeHtml(match[4])}</span>`;
+        } else if (match[5]) {
+            // Number
+            result += `<span class="token-number">${escapeHtml(match[5])}</span>`;
+        } else if (match[6]) {
+            // Standard Builtin
+            result += `<span class="token-builtin">${escapeHtml(match[6])}</span>`;
+        }
+        lastIndex = tokenRegex.lastIndex;
+    }
+    result += escapeHtml(text.slice(lastIndex));
+    if (text.endsWith('\n')) {
+        result += ' ';
+    }
+    return result;
+}
+
+function updateEditorView() {
+    updateLineNumbers();
+    updateStats();
+    if (highlightCode) {
+        highlightCode.innerHTML = renderSyntaxHighlighting(editor.value);
+    }
+}
+
 function updateLineNumbers() {
     const lines = editor.value.split('\n').length;
     let numbersText = '';
@@ -222,19 +140,20 @@ function updateStats() {
     cursorPos.textContent = `Ln ${row}, Col ${col}`;
 }
 
-editor.addEventListener('input', () => {
-    updateLineNumbers();
-    updateStats();
-});
-
+// Input and Scroll Synchronization
+editor.addEventListener('input', updateEditorView);
 editor.addEventListener('click', updateStats);
 editor.addEventListener('keyup', updateStats);
 
 editor.addEventListener('scroll', () => {
     lineNumbers.scrollTop = editor.scrollTop;
+    if (highlightLayer) {
+        highlightLayer.scrollTop = editor.scrollTop;
+        highlightLayer.scrollLeft = editor.scrollLeft;
+    }
 });
 
-// Tab key indentation
+// Tab indentation and shortcut handling
 editor.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
         e.preventDefault();
@@ -242,26 +161,86 @@ editor.addEventListener('keydown', (e) => {
         const end = editor.selectionEnd;
         editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
         editor.selectionStart = editor.selectionEnd = start + 4;
-        updateLineNumbers();
-        updateStats();
+        updateEditorView();
     } else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
         runCode();
     }
 });
 
-// Load preset examples
-exampleSelect.addEventListener('change', () => {
-    const key = exampleSelect.value;
-    if (EXAMPLES[key]) {
-        editor.value = EXAMPLES[key];
-        updateLineNumbers();
-        updateStats();
-        editor.scrollTop = 0;
+// -----------------------------------------------------------------------------
+// 2. Calming Dark Theme Toggle
+// -----------------------------------------------------------------------------
+function applyTheme(isDark) {
+    if (isDark) {
+        document.body.classList.add('dark-theme');
+        themeIconMoon.style.display = 'none';
+        themeIconSun.style.display = 'inline-block';
+        themeLabel.textContent = 'Light Theme';
+    } else {
+        document.body.classList.remove('dark-theme');
+        themeIconMoon.style.display = 'inline-block';
+        themeIconSun.style.display = 'none';
+        themeLabel.textContent = 'Dark Theme';
     }
+}
+
+// Load saved theme preference
+const savedTheme = localStorage.getItem('minilang-theme');
+if (savedTheme === 'dark') {
+    applyTheme(true);
+} else {
+    applyTheme(false);
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    const isDarkNow = document.body.classList.contains('dark-theme');
+    const nextDark = !isDarkNow;
+    applyTheme(nextDark);
+    localStorage.setItem('minilang-theme', nextDark ? 'dark' : 'light');
 });
 
-// Tab bar handling
+// -----------------------------------------------------------------------------
+// 3. Searchable Syntax Documentation
+// -----------------------------------------------------------------------------
+if (searchInput) {
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        syntaxCards.forEach(card => {
+            const keywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+            const text = card.textContent.toLowerCase();
+
+            if (!query || keywords.includes(query) || text.includes(query)) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (searchCount) {
+            searchCount.textContent = `${visibleCount} of ${syntaxCards.length} topics`;
+        }
+    });
+}
+
+// "Insert into Compiler" Buttons
+document.querySelectorAll('.insert-snippet-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const snippet = btn.getAttribute('data-snippet');
+        const pos = editor.selectionStart;
+        editor.value = editor.value.substring(0, pos) + '\n' + snippet + '\n' + editor.value.substring(pos);
+        updateEditorView();
+        switchTab('console-view');
+        editor.focus();
+    });
+});
+
+// -----------------------------------------------------------------------------
+// 4. Tab Navigation
+// -----------------------------------------------------------------------------
 const tabButtons = document.querySelectorAll('.tab-btn');
 const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -282,20 +261,9 @@ function switchTab(tabId) {
     if (btn) btn.click();
 }
 
-// Quick reference snippet inserters
-document.querySelectorAll('.insert-snippet-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const snippet = btn.getAttribute('data-snippet');
-        const pos = editor.selectionStart;
-        editor.value = editor.value.substring(0, pos) + '\n' + snippet + '\n' + editor.value.substring(pos);
-        updateLineNumbers();
-        updateStats();
-        switchTab('console-view');
-        editor.focus();
-    });
-});
-
-// API Calls
+// -----------------------------------------------------------------------------
+// 5. Execution REST API Calls
+// -----------------------------------------------------------------------------
 async function runCode() {
     const code = editor.value;
     editorStatus.textContent = "Executing...";
@@ -380,15 +348,14 @@ async function showAst() {
     }
 }
 
-// Action Buttons
+// Action Button Listeners
 runBtn.addEventListener('click', runCode);
 bytecodeBtn.addEventListener('click', showBytecode);
 astBtn.addEventListener('click', showAst);
 
 formatBtn.addEventListener('click', () => {
     editor.value = '';
-    updateLineNumbers();
-    updateStats();
+    updateEditorView();
     editor.focus();
 });
 
@@ -399,7 +366,7 @@ clearConsoleBtn.addEventListener('click', () => {
     metricStatus.className = 'metric-pill';
 });
 
-// Copy buttons
+// Clipboard Copy Listeners
 document.getElementById('copy-bytecode-btn').addEventListener('click', () => {
     navigator.clipboard.writeText(bytecodeOutput.textContent);
 });
