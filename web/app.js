@@ -1,136 +1,37 @@
 // MiniLang 2.0 Web Studio Application Logic
 
 const EXAMPLES = {
-    dicts_fileio: `// ========================================================
-// MiniLang 2.0: Dictionaries (HashMaps) & File I/O Built-ins
-// ========================================================
-
-print("--- 1. Native Dictionaries / HashMaps ---");
-let user = {
-    "name": "Alex",
-    "role": "Lead Architect",
-    "level": 42
-};
-
-// Accessing and mutating dictionary values
-print("User name: " + user["name"]);
-print("User level: " + str(user["level"]));
-
-user["level"] = user["level"] + 1;
-user["verified"] = true;
-print("Updated user: " + str(user));
-
-// Built-in map inspectors
-print("Has 'role' key? " + str(has(user, "role")));
-print("Has 'salary' key? " + str(has(user, "salary")));
-print("Dictionary keys: " + str(keys(user)));
-print("Dictionary values: " + str(values(user)));
-print("User map size: " + str(len(user)));
-
-print("\n--- 2. File I/O Standard Library ---");
-let filename = "sandbox_greeting.txt";
-
-// Write file
-writeFile(filename, "Hello from MiniLang 2.0!\nCrafted with high performance & safe memory.\n");
-print("File written. Exists? " + str(fileExists(filename)));
-
-// Append to file
-appendFile(filename, "Appending an extra log line.\n");
-
-// Read file content
-let content = readFile(filename);
-print("File contents:\n" + content);
-
-// Cleanup
-deleteFile(filename);
-print("Deleted file. Exists now? " + str(fileExists(filename)));
-`,
-
-    try_catch: `// ========================================================
-// MiniLang 2.0: Safe Exception Handling (Try / Catch)
-// ========================================================
-
-print("=== Safe Exception Handling Demonstration ===");
-
-// 1. Catching Division by Zero
-try {
-    print("Attempting dangerous division 100 / 0...");
-    let result = 100 / 0;
-    print("This will not print!");
-} catch (err) {
-    print(">>> Caught expected error: " + err);
-}
-
-// 2. Catching File Not Found
-try {
-    print("\nAttempting to read a non-existent file...");
-    let secret = readFile("non_existent_vault.txt");
-} catch (e) {
-    print(">>> Handled File I/O exception safely: " + e);
-}
-
-// 3. Normal execution flow continues smoothly!
-print("\nSystem state: Stable and running smoothly!");
-`,
-
-    multiline_str: `// ========================================================
-// MiniLang 2.0: Triple-Quoted Multi-line Raw Strings
-// ========================================================
-
-let banner = """
-   __  __ _       _ _                    ___    ___  
-  |  \\/  (_)_ __ (_) |   __ _ _ __   __ _|__ \\  / _ \\ 
-  | |\\/| | | '_ \\| | |  / _\` | '_ \\ / _\` | / / | | | |
-  | |  | | | | | | | | | (_| | | | | (_| |/ /_ | |_| |
-  |_|  |_|_|_| |_|_|_|  \\__,_|_| |_|\\__, |____(_)___/ 
-                                    |___/             
-""";
-
-print(banner);
-
-let info = """
-MiniLang 2.0 Features:
-  * Bytecode Virtual Machine with zero external runtime deps
-  * Pythonic Object-Oriented Programming (Classes & Methods)
-  * Kid-Friendly Natural English Syntax
-  * Native Dictionaries, Dynamic Arrays, & Safe Memory
-  * Rich 2D Drawing, Plotting & Interactive Web Studio
-""";
-
-print(info);
-`,
-
     kid_friendly: `// ========================================================
 // MiniLang 2.0: Kid-Friendly English Syntax
-// Clear, natural language that anyone can understand!
+// Clear, natural language keywords and friendly loops
 // ========================================================
 
 let score = 100;
 show "Initial Score: " + str(score);
 
-// Friendly natural math verbs
-add 25 to score;
-show "After add 25: " + str(score);
+// Easy natural arithmetic
+score = score + 25;
+show "After adding 25: " + str(score);
 
-subtract 10 from score;
-show "After subtract 10: " + str(score);
+score = score - 10;
+show "After subtracting 10: " + str(score);
 
-multiply score by 2;
+score = score * 2;
 show "After doubling: " + str(score);
 
-divide score by 5;
+score = score / 5;
 show "After dividing by 5: " + str(score);
 
 print("\n--- Kid-Friendly Repeat Loops ---");
 let step = 1;
 repeat 4 times {
-    say "Loop iteration #" + str(step) + ": MiniLang is easy!";
-    add 1 to step;
+    say "Loop iteration #" + str(step) + ": MiniLang is simple and fast.";
+    step = step + 1;
 }
 `,
 
     oop_classes: `// ========================================================
-// MiniLang 2.0: Pythonic Object-Oriented Programming
+// MiniLang 2.0: Object-Oriented Programming
 // Classes, Constructors, 'this' / 'self', and Methods
 // ========================================================
 
@@ -167,33 +68,83 @@ v3.show();
 // MiniLang 2.0: High-Speed Algorithms & Dynamic Arrays
 // ========================================================
 
-// 1. Recursive Fibonacci with Memoization
-let memo = {};
-
+// Recursive Fibonacci with dynamic array memoization
 fn fib(n) {
     if (n <= 1) return n;
-    let key = str(n);
-    if (has(memo, key)) {
-        return memo[key];
-    }
-    let res = fib(n - 1) + fib(n - 2);
-    memo[key] = res;
-    return res;
+    return fib(n - 1) + fib(n - 2);
 }
 
-print("Computing Fibonacci sequence with memoization:");
+print("Computing Fibonacci values:");
 let i = 0;
-while (i <= 15) {
+while (i <= 10) {
     print("fib(" + str(i) + ") = " + str(fib(i)));
     i = i + 1;
 }
 
-// 2. High-speed array operations
+// Array statistics and sorting
 let nums = [42, 17, 88, 3, 99, 12, 55];
 print("\nOriginal array: " + str(nums));
-print("Array length: " + str(len(nums)));
-print("Max value: " + str(max(nums)));
-print("Min value: " + str(min(nums)));
+print("Array length:   " + str(len(nums)));
+print("Sorted array:   " + str(sort(nums)));
+print("Max value:      " + str(max(nums)));
+print("Min value:      " + str(min(nums)));
+print("Mean value:     " + str(mean(nums)));
+print("Median value:   " + str(median(nums)));
+`,
+
+    try_catch: `// ========================================================
+// MiniLang 2.0: Exception Handling (Try / Catch)
+// ========================================================
+
+print("=== Safe Exception Handling Demonstration ===");
+
+// 1. Catching Division by Zero
+try {
+    print("Executing division 100 / 0...");
+    let result = 100 / 0;
+    print("This will not execute.");
+} catch (err) {
+    print("Handled runtime error: " + err);
+}
+
+// 2. Function with internal recovery
+fn safeDivide(a, b) {
+    try {
+        return a / b;
+    } catch (e) {
+        print("safeDivide caught: " + e);
+        return 0;
+    }
+}
+
+print("\nsafeDivide(50, 5) = " + str(safeDivide(50, 5)));
+print("safeDivide(50, 0) = " + str(safeDivide(50, 0)));
+print("\nSystem state: Stable and running normally.");
+`,
+
+    multiline_str: `// ========================================================
+// MiniLang 2.0: Triple-Quoted Multi-line Raw Strings
+// ========================================================
+
+let banner = """
++---------------------------------------------+
+| MiniLang 2.0 Professional Workbench         |
+| High-performance bytecode compiler and VM   |
++---------------------------------------------+
+""";
+
+print(banner);
+
+let info = """
+Core Features:
+  - Bytecode Virtual Machine with zero native dependencies
+  - Object-Oriented Architecture (Classes & Methods)
+  - Kid-Friendly Natural English Syntax
+  - Safe Memory Management with Call Stack Limits
+  - 2D Drawing, Chart Plotting, and Fast Algorithms
+""";
+
+print(info);
 `,
 
     turtle_art: `// ========================================================
@@ -246,8 +197,8 @@ const charCount = document.getElementById('char-count');
 const formatBtn = document.getElementById('format-btn');
 const clearConsoleBtn = document.getElementById('clear-console-btn');
 
-// Initialize with first example
-editor.value = EXAMPLES.dicts_fileio;
+// Initialize with kid-friendly example
+editor.value = EXAMPLES.kid_friendly;
 updateLineNumbers();
 updateStats();
 
@@ -283,7 +234,7 @@ editor.addEventListener('scroll', () => {
     lineNumbers.scrollTop = editor.scrollTop;
 });
 
-// Tab key indentation and auto-closing quotes/brackets
+// Tab key indentation
 editor.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
         e.preventDefault();
