@@ -54,12 +54,15 @@ const clearConsoleBtn = document.getElementById('clear-console-btn');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
 const themeIconMoon = document.getElementById('theme-icon-moon');
 const themeIconSun = document.getElementById('theme-icon-sun');
-const themeLabel = document.getElementById('theme-label');
 
 // Documentation Search Elements
 const searchInput = document.getElementById('syntax-search-input');
 const searchCount = document.getElementById('search-count');
 const syntaxCards = document.querySelectorAll('.ref-card');
+
+if (searchCount && syntaxCards) {
+    searchCount.textContent = `${syntaxCards.length} topics`;
+}
 
 // Initialize Editor with Default Script
 editor.value = DEFAULT_SCRIPT;
@@ -174,14 +177,12 @@ editor.addEventListener('keydown', (e) => {
 function applyTheme(isDark) {
     if (isDark) {
         document.body.classList.add('dark-theme');
-        themeIconMoon.style.display = 'none';
-        themeIconSun.style.display = 'inline-block';
-        themeLabel.textContent = 'Light Theme';
+        if (themeIconMoon) themeIconMoon.style.display = 'none';
+        if (themeIconSun) themeIconSun.style.display = 'inline-block';
     } else {
         document.body.classList.remove('dark-theme');
-        themeIconMoon.style.display = 'inline-block';
-        themeIconSun.style.display = 'none';
-        themeLabel.textContent = 'Dark Theme';
+        if (themeIconMoon) themeIconMoon.style.display = 'inline-block';
+        if (themeIconSun) themeIconSun.style.display = 'none';
     }
 }
 

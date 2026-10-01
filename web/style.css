@@ -280,8 +280,10 @@ body {
 }
 
 .theme-toggle {
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: 0.42rem 0.55rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Workspace Layout */

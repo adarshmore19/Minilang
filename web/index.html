@@ -26,7 +26,7 @@
             </div>
 
             <div class="nav-actions">
-                <button id="theme-toggle-btn" class="icon-btn theme-toggle" title="Toggle calming dark theme">
+                <button id="theme-toggle-btn" class="icon-btn theme-toggle" title="Toggle theme" aria-label="Toggle theme">
                     <svg id="theme-icon-moon" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
@@ -41,7 +41,6 @@
                         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
-                    <span id="theme-label">Dark Theme</span>
                 </button>
 
                 <button id="run-btn" class="btn btn-primary" title="Execute script (Ctrl+Enter)">
@@ -163,7 +162,7 @@ Press "Run" (or Ctrl+Enter) to execute your program.</span></pre>
                         <pre id="ast-output" class="terminal-view code-font">// Click "AST" to inspect parsed AST statements.</pre>
                     </div>
 
-                    <!-- Tab 4: Searchable Syntax Documentation -->
+                    <!-- Tab 4: Searchable Syntax Documentation (Basics to Advanced) -->
                     <div id="cheat-view" class="tab-panel">
                         <div class="reference-content">
                             <div class="docs-header">
@@ -173,79 +172,145 @@ Press "Run" (or Ctrl+Enter) to execute your program.</span></pre>
                                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                     </svg>
                                     <input type="text" id="syntax-search-input" placeholder="Search syntax (e.g. variable, loop, class, if, array, math, file, try)..." aria-label="Search syntax">
-                                    <span id="search-count" class="search-count-badge">12 topics</span>
+                                    <span id="search-count" class="search-count-badge">20 topics</span>
                                 </div>
                             </div>
 
                             <div class="reference-grid" id="syntax-cards-container">
-                                <!-- Card 1: Variables -->
-                                <div class="ref-card" data-keywords="variable let assign define name value mutability">
+                                <!-- 1. Hello World & Console Output -->
+                                <div class="ref-card" data-keywords="hello world print say show output console text basics">
+                                    <div class="ref-card-header">
+                                        <h4>Hello World &amp; Console Output</h4>
+                                        <span class="topic-tag">Basics</span>
+                                    </div>
+                                    <p class="ref-desc">Print values to standard output. <code>say</code> and <code>show</code> are kid-friendly aliases for <code>print</code>.</p>
+                                    <code>say &quot;Hello, World!&quot;;&#10;show 42;&#10;print(&quot;MiniLang is live!&quot;);</code>
+                                    <button class="insert-snippet-btn" data-snippet="say &quot;Hello, World!&quot;;&#10;show 42;&#10;print(&quot;MiniLang is live!&quot;);">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 2. Variables & Dynamic Assignment -->
+                                <div class="ref-card" data-keywords="variable let assign define name value mutability basics">
                                     <div class="ref-card-header">
                                         <h4>Variables &amp; Assignment</h4>
-                                        <span class="topic-tag">Core</span>
+                                        <span class="topic-tag">Basics</span>
                                     </div>
-                                    <p class="ref-desc">Declare with <code>let</code> or assign dynamically without declaration. Reassign with arithmetic updates.</p>
+                                    <p class="ref-desc">Declare with <code>let</code> or assign dynamically without keywords. Variables support dynamic typing.</p>
                                     <code>let score = 100;&#10;score = score + 25;&#10;name = &quot;Alex&quot;;&#10;say name;&#10;show score;</code>
                                     <button class="insert-snippet-btn" data-snippet="let score = 100;&#10;score = score + 25;&#10;name = &quot;Alex&quot;;&#10;say name;&#10;show score;">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 2: Kid-Friendly Loops -->
-                                <div class="ref-card" data-keywords="repeat times loop kid friendly simple iteration say show">
+                                <!-- 3. Data Types & Type Inspection -->
+                                <div class="ref-card" data-keywords="type typeof integer float boolean string array dictionary null basics">
                                     <div class="ref-card-header">
-                                        <h4>Kid-Friendly Repeat Loops</h4>
-                                        <span class="topic-tag">Control</span>
+                                        <h4>Data Types &amp; Type Inspection</h4>
+                                        <span class="topic-tag">Basics</span>
                                     </div>
-                                    <p class="ref-desc">Execute a block of code a set number of times without complex loop indices.</p>
-                                    <code>repeat 4 times {&#10;    say &quot;MiniLang is simple and fast.&quot;;&#10;}</code>
-                                    <button class="insert-snippet-btn" data-snippet="repeat 4 times {&#10;    say &quot;MiniLang is simple and fast.&quot;;&#10;}">Insert into Compiler</button>
+                                    <p class="ref-desc">Inspect runtime types using <code>type(val)</code>: integer, float, string, boolean, array, map, null.</p>
+                                    <code>print(type(42));&#10;print(type(3.14));&#10;print(type(&quot;text&quot;));&#10;print(type([1, 2]));&#10;print(type({ &quot;a&quot;: 1 }));</code>
+                                    <button class="insert-snippet-btn" data-snippet="print(type(42));&#10;print(type(3.14));&#10;print(type(&quot;text&quot;));&#10;print(type([1, 2]));&#10;print(type({ &quot;a&quot;: 1 }));">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 3: Conditionals -->
-                                <div class="ref-card" data-keywords="if else condition logic and or not is boolean compare">
+                                <!-- 4. Basic Arithmetic Operations -->
+                                <div class="ref-card" data-keywords="arithmetic add subtract multiply divide modulo math operators basics">
                                     <div class="ref-card-header">
-                                        <h4>Conditionals &amp; Logic</h4>
-                                        <span class="topic-tag">Logic</span>
+                                        <h4>Arithmetic Operators</h4>
+                                        <span class="topic-tag">Basics</span>
+                                    </div>
+                                    <p class="ref-desc">Standard mathematical operations: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> with standard precedence.</p>
+                                    <code>let a = 20 + 5;&#10;let b = 100 / 4;&#10;let c = 17 % 5;&#10;print(&quot;20 + 5 = &quot; + str(a));&#10;print(&quot;17 % 5 = &quot; + str(c));</code>
+                                    <button class="insert-snippet-btn" data-snippet="let a = 20 + 5;&#10;let b = 100 / 4;&#10;let c = 17 % 5;&#10;print(&quot;20 + 5 = &quot; + str(a));&#10;print(&quot;17 % 5 = &quot; + str(c));">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 5. Strings & String Multiplication -->
+                                <div class="ref-card" data-keywords="string text concatenation multiply repeat quotes str basics">
+                                    <div class="ref-card-header">
+                                        <h4>Strings &amp; String Multiplication</h4>
+                                        <span class="topic-tag">Basics</span>
+                                    </div>
+                                    <p class="ref-desc">Concatenate strings with <code>+</code> and repeat strings with multiplication <code>*</code>.</p>
+                                    <code>let greeting = &quot;Hello &quot; + &quot;World!&quot;;&#10;let cheer = (&quot;Hip &quot; * 2) + &quot;Hurray!&quot;;&#10;print(greeting);&#10;print(cheer);</code>
+                                    <button class="insert-snippet-btn" data-snippet="let greeting = &quot;Hello &quot; + &quot;World!&quot;;&#10;let cheer = (&quot;Hip &quot; * 2) + &quot;Hurray!&quot;;&#10;print(greeting);&#10;print(cheer);">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 6. Conditionals & English Logic -->
+                                <div class="ref-card" data-keywords="if else condition logic and or not is boolean compare control">
+                                    <div class="ref-card-header">
+                                        <h4>Conditionals &amp; English Logic</h4>
+                                        <span class="topic-tag">Control</span>
                                     </div>
                                     <p class="ref-desc">Branches with <code>if</code> and <code>else</code>. Parentheses optional. Uses <code>and</code>, <code>or</code>, <code>not</code>, <code>is</code>.</p>
                                     <code>let score = 85;&#10;if score &gt;= 80 and not (score is 100) {&#10;    say &quot;Great score!&quot;;&#10;} else {&#10;    say &quot;Keep going!&quot;;&#10;}</code>
                                     <button class="insert-snippet-btn" data-snippet="let score = 85;&#10;if score &gt;= 80 and not (score is 100) {&#10;    say &quot;Great score!&quot;;&#10;} else {&#10;    say &quot;Keep going!&quot;;&#10;}">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 4: Functions -->
-                                <div class="ref-card" data-keywords="function fn def return call parameter argument">
+                                <!-- 7. Kid-Friendly Repeat Loops -->
+                                <div class="ref-card" data-keywords="repeat times loop kid friendly simple iteration say show control">
                                     <div class="ref-card-header">
-                                        <h4>Functions</h4>
+                                        <h4>Kid-Friendly Repeat Loops</h4>
+                                        <span class="topic-tag">Control</span>
+                                    </div>
+                                    <p class="ref-desc">Execute code blocks $N$ times directly without complex counter variables or loop boilerplate.</p>
+                                    <code>let step = 1;&#10;repeat 3 times {&#10;    say &quot;Loop iteration #&quot; + str(step);&#10;    step = step + 1;&#10;}</code>
+                                    <button class="insert-snippet-btn" data-snippet="let step = 1;&#10;repeat 3 times {&#10;    say &quot;Loop iteration #&quot; + str(step);&#10;    step = step + 1;&#10;}">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 8. While Loops & Break / Continue -->
+                                <div class="ref-card" data-keywords="while loop break continue iteration control">
+                                    <div class="ref-card-header">
+                                        <h4>While Loops (Break &amp; Continue)</h4>
+                                        <span class="topic-tag">Control</span>
+                                    </div>
+                                    <p class="ref-desc">Loops while condition holds true. Supports <code>break</code> to exit early and <code>continue</code> to jump.</p>
+                                    <code>let i = 0;&#10;while i &lt; 8 {&#10;    i = i + 1;&#10;    if i == 3 continue;&#10;    if i == 6 break;&#10;    print(&quot;i = &quot; + str(i));&#10;}</code>
+                                    <button class="insert-snippet-btn" data-snippet="let i = 0;&#10;while i &lt; 8 {&#10;    i = i + 1;&#10;    if i == 3 continue;&#10;    if i == 6 break;&#10;    print(&quot;i = &quot; + str(i));&#10;}">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 9. For-In Loops -->
+                                <div class="ref-card" data-keywords="for in loop iterate array range collection foreach control">
+                                    <div class="ref-card-header">
+                                        <h4>For-In Loops</h4>
+                                        <span class="topic-tag">Control</span>
+                                    </div>
+                                    <p class="ref-desc">Iterate sequentially over array items, range sequences, or characters in a string.</p>
+                                    <code>for fruit in [&quot;Apple&quot;, &quot;Berry&quot;, &quot;Cherry&quot;] {&#10;    say fruit;&#10;}&#10;for x in range(3) {&#10;    print(&quot;Range step: &quot; + str(x));&#10;}</code>
+                                    <button class="insert-snippet-btn" data-snippet="for fruit in [&quot;Apple&quot;, &quot;Berry&quot;, &quot;Cherry&quot;] {&#10;    say fruit;&#10;}&#10;for x in range(3) {&#10;    print(&quot;Range step: &quot; + str(x));&#10;}">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 10. Functions & Return Values -->
+                                <div class="ref-card" data-keywords="function fn def return call parameter argument subroutine functions">
+                                    <div class="ref-card-header">
+                                        <h4>Functions &amp; Parameters</h4>
                                         <span class="topic-tag">Functions</span>
                                     </div>
-                                    <p class="ref-desc">Define reusable subroutines using <code>fn</code> or <code>def</code> with parameters and return values.</p>
+                                    <p class="ref-desc">Define reusable subroutines using <code>fn</code> or <code>def</code> with parameters and <code>return</code> values.</p>
                                     <code>fn addNumbers(a, b) {&#10;    return a + b;&#10;}&#10;let total = addNumbers(15, 25);&#10;print(&quot;Total: &quot; + str(total));</code>
                                     <button class="insert-snippet-btn" data-snippet="fn addNumbers(a, b) {&#10;    return a + b;&#10;}&#10;let total = addNumbers(15, 25);&#10;print(&quot;Total: &quot; + str(total));">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 5: Classes & OOP -->
-                                <div class="ref-card" data-keywords="class oop object method constructor init this self instance">
+                                <!-- 11. Recursion -->
+                                <div class="ref-card" data-keywords="recursion recursive factorial stack overflow safety functions">
                                     <div class="ref-card-header">
-                                        <h4>Classes &amp; OOP</h4>
-                                        <span class="topic-tag">OOP</span>
+                                        <h4>Recursive Functions</h4>
+                                        <span class="topic-tag">Functions</span>
                                     </div>
-                                    <p class="ref-desc">Object-oriented classes with <code>class</code>, constructor <code>init</code>, methods, and <code>this</code> or <code>self</code>.</p>
-                                    <code>class Vector2D {&#10;    init(x, y) {&#10;        this.x = x;&#10;        this.y = y;&#10;    }&#10;    magnitude() {&#10;        return sqrt(this.x * this.x + this.y * this.y);&#10;    }&#10;}&#10;let v = Vector2D(3, 4);&#10;print(&quot;Magnitude: &quot; + str(v.magnitude()));</code>
-                                    <button class="insert-snippet-btn" data-snippet="class Vector2D {&#10;    init(x, y) {&#10;        this.x = x;&#10;        this.y = y;&#10;    }&#10;    magnitude() {&#10;        return sqrt(this.x * this.x + this.y * this.y);&#10;    }&#10;}&#10;let v = Vector2D(3, 4);&#10;print(&quot;Magnitude: &quot; + str(v.magnitude()));">Insert into Compiler</button>
+                                    <p class="ref-desc">Functions calling themselves, protected by a VM recursion call-stack limit (1000 frames).</p>
+                                    <code>fn factorial(n) {&#10;    if n &lt;= 1 return 1;&#10;    return n * factorial(n - 1);&#10;}&#10;print(&quot;factorial(5) = &quot; + str(factorial(5)));</code>
+                                    <button class="insert-snippet-btn" data-snippet="fn factorial(n) {&#10;    if n &lt;= 1 return 1;&#10;    return n * factorial(n - 1);&#10;}&#10;print(&quot;factorial(5) = &quot; + str(factorial(5)));">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 6: Dynamic Arrays -->
-                                <div class="ref-card" data-keywords="array list element index push pop len collection">
+                                <!-- 12. Dynamic Arrays -->
+                                <div class="ref-card" data-keywords="array list element index push pop len collection data">
                                     <div class="ref-card-header">
                                         <h4>Arrays &amp; Lists</h4>
                                         <span class="topic-tag">Data</span>
                                     </div>
                                     <p class="ref-desc">Dynamic collections indexed with <code>arr[i]</code>. Built-ins include <code>push</code>, <code>pop</code>, and <code>len</code>.</p>
-                                    <code>let items = [10, 20, 30];&#10;push(items, 40);&#10;print(&quot;Length: &quot; + str(len(items)));&#10;print(&quot;First:  &quot; + str(items[0]));&#10;print(&quot;All:    &quot; + str(items));</code>
-                                    <button class="insert-snippet-btn" data-snippet="let items = [10, 20, 30];&#10;push(items, 40);&#10;print(&quot;Length: &quot; + str(len(items)));&#10;print(&quot;First:  &quot; + str(items[0]));&#10;print(&quot;All:    &quot; + str(items));">Insert into Compiler</button>
+                                    <code>let items = [10, 20, 30];&#10;push(items, 40);&#10;let last = pop(items);&#10;print(&quot;Length: &quot; + str(len(items)));&#10;print(&quot;First:  &quot; + str(items[0]));&#10;print(&quot;All:    &quot; + str(items));</code>
+                                    <button class="insert-snippet-btn" data-snippet="let items = [10, 20, 30];&#10;push(items, 40);&#10;let last = pop(items);&#10;print(&quot;Length: &quot; + str(len(items)));&#10;print(&quot;First:  &quot; + str(items[0]));&#10;print(&quot;All:    &quot; + str(items));">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 7: Dictionaries -->
-                                <div class="ref-card" data-keywords="dictionary map hashmap key value object has keys values">
+                                <!-- 13. Dictionaries / HashMaps -->
+                                <div class="ref-card" data-keywords="dictionary map hashmap key value object has keys values data">
                                     <div class="ref-card-header">
                                         <h4>Dictionaries (HashMaps)</h4>
                                         <span class="topic-tag">Data</span>
@@ -255,59 +320,81 @@ Press "Run" (or Ctrl+Enter) to execute your program.</span></pre>
                                     <button class="insert-snippet-btn" data-snippet="let user = { &quot;name&quot;: &quot;Ada&quot;, &quot;score&quot;: 95 };&#10;user[&quot;role&quot;] = &quot;Engineer&quot;;&#10;print(&quot;Name: &quot; + user[&quot;name&quot;]);&#10;print(&quot;Keys: &quot; + str(keys(user)));&#10;print(&quot;Has role? &quot; + str(has(user, &quot;role&quot;)));">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 8: Try / Catch -->
-                                <div class="ref-card" data-keywords="try catch exception error handle safe panic recover">
+                                <!-- 14. Classes & Constructors -->
+                                <div class="ref-card" data-keywords="class oop object constructor init instance property field oop">
+                                    <div class="ref-card-header">
+                                        <h4>Classes &amp; Constructors</h4>
+                                        <span class="topic-tag">OOP</span>
+                                    </div>
+                                    <p class="ref-desc">Define custom object types with <code>class</code> and the <code>init(...)</code> constructor method.</p>
+                                    <code>class Player {&#10;    init(name, level) {&#10;        this.name = name;&#10;        this.level = level;&#10;    }&#10;}&#10;let p = Player(&quot;Nova&quot;, 10);&#10;print(p.name + &quot; level: &quot; + str(p.level));</code>
+                                    <button class="insert-snippet-btn" data-snippet="class Player {&#10;    init(name, level) {&#10;        this.name = name;&#10;        this.level = level;&#10;    }&#10;}&#10;let p = Player(&quot;Nova&quot;, 10);&#10;print(p.name + &quot; level: &quot; + str(p.level));">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 15. Class Methods & this / self -->
+                                <div class="ref-card" data-keywords="method member function this self oop class bind receiver oop">
+                                    <div class="ref-card-header">
+                                        <h4>Class Methods (this / self)</h4>
+                                        <span class="topic-tag">OOP</span>
+                                    </div>
+                                    <p class="ref-desc">Methods bound to instances. Both <code>this</code> and <code>self</code> work seamlessly as receiver references.</p>
+                                    <code>class Vector2D {&#10;    init(x, y) {&#10;        this.x = x;&#10;        this.y = y;&#10;    }&#10;    magnitude() {&#10;        return sqrt(this.x * this.x + this.y * this.y);&#10;    }&#10;}&#10;let v = Vector2D(3.0, 4.0);&#10;print(&quot;Magnitude: &quot; + str(v.magnitude()));</code>
+                                    <button class="insert-snippet-btn" data-snippet="class Vector2D {&#10;    init(x, y) {&#10;        this.x = x;&#10;        this.y = y;&#10;    }&#10;    magnitude() {&#10;        return sqrt(this.x * this.x + this.y * this.y);&#10;    }&#10;}&#10;let v = Vector2D(3.0, 4.0);&#10;print(&quot;Magnitude: &quot; + str(v.magnitude()));">Insert into Compiler</button>
+                                </div>
+
+                                <!-- 16. Try / Catch Exception Handling -->
+                                <div class="ref-card" data-keywords="try catch exception error handle safe panic recover safety">
                                     <div class="ref-card-header">
                                         <h4>Exception Handling (Try / Catch)</h4>
                                         <span class="topic-tag">Safety</span>
                                     </div>
-                                    <p class="ref-desc">Safely intercept division by zero, invalid indexes, and file errors without halting execution.</p>
-                                    <code>try {&#10;    let res = 100 / 0;&#10;} catch (err) {&#10;    print(&quot;Handled error: &quot; + err);&#10;}&#10;print(&quot;Program continues safely.&quot;);</code>
-                                    <button class="insert-snippet-btn" data-snippet="try {&#10;    let res = 100 / 0;&#10;} catch (err) {&#10;    print(&quot;Handled error: &quot; + err);&#10;}&#10;print(&quot;Program continues safely.&quot;);">Insert into Compiler</button>
+                                    <p class="ref-desc">Catch runtime errors (divide by zero, bad indices, missing files) and recover without crashing.</p>
+                                    <code>try {&#10;    let res = 100 / 0;&#10;} catch (err) {&#10;    print(&quot;Caught error: &quot; + err);&#10;}&#10;print(&quot;System remains stable.&quot;);</code>
+                                    <button class="insert-snippet-btn" data-snippet="try {&#10;    let res = 100 / 0;&#10;} catch (err) {&#10;    print(&quot;Caught error: &quot; + err);&#10;}&#10;print(&quot;System remains stable.&quot;);">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 9: Multi-line Strings -->
-                                <div class="ref-card" data-keywords="string text multiline quotes raw str banner template">
+                                <!-- 17. Multi-line Raw Strings -->
+                                <div class="ref-card" data-keywords="string text multiline quotes raw str banner template strings">
                                     <div class="ref-card-header">
                                         <h4>Multi-line Raw Strings</h4>
                                         <span class="topic-tag">Strings</span>
                                     </div>
-                                    <p class="ref-desc">Triple-quoted strings <code>&quot;&quot;&quot; ... &quot;&quot;&quot;</code> retain newlines and formatting verbatim.</p>
+                                    <p class="ref-desc">Triple-quoted strings <code>&quot;&quot;&quot; ... &quot;&quot;&quot;</code> preserve line breaks, indentation, and quotes verbatim.</p>
                                     <code>let banner = &quot;&quot;&quot;&#10;+-----------------------------+&#10;| MiniLang Language Workbench |&#10;+-----------------------------+&#10;&quot;&quot;&quot;;&#10;print(banner);</code>
                                     <button class="insert-snippet-btn" data-snippet="let banner = &quot;&quot;&quot;&#10;+-----------------------------+&#10;| MiniLang Language Workbench |&#10;+-----------------------------+&#10;&quot;&quot;&quot;;&#10;print(banner);">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 10: File I/O -->
-                                <div class="ref-card" data-keywords="file io read write append exists delete disk filesystem">
+                                <!-- 18. File I/O Built-ins -->
+                                <div class="ref-card" data-keywords="file io read write append exists delete disk filesystem storage system">
                                     <div class="ref-card-header">
                                         <h4>File I/O Built-ins</h4>
                                         <span class="topic-tag">System</span>
                                     </div>
-                                    <p class="ref-desc">Read and write files directly: <code>writeFile</code>, <code>readFile</code>, <code>appendFile</code>, <code>fileExists</code>, <code>deleteFile</code>.</p>
+                                    <p class="ref-desc">Disk file management: <code>writeFile</code>, <code>readFile</code>, <code>appendFile</code>, <code>fileExists</code>, <code>deleteFile</code>.</p>
                                     <code>writeFile(&quot;demo.txt&quot;, &quot;Hello from MiniLang!\n&quot;);&#10;appendFile(&quot;demo.txt&quot;, &quot;Appended log line.\n&quot;);&#10;print(readFile(&quot;demo.txt&quot;));&#10;deleteFile(&quot;demo.txt&quot;);</code>
                                     <button class="insert-snippet-btn" data-snippet="writeFile(&quot;demo.txt&quot;, &quot;Hello from MiniLang!\n&quot;);&#10;appendFile(&quot;demo.txt&quot;, &quot;Appended log line.\n&quot;);&#10;print(readFile(&quot;demo.txt&quot;));&#10;deleteFile(&quot;demo.txt&quot;);">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 11: Algorithms & Statistics -->
-                                <div class="ref-card" data-keywords="algo sort binarysearch mean median sum reverse range statistics">
+                                <!-- 19. Fast Algorithms & Statistics -->
+                                <div class="ref-card" data-keywords="algo sort binarysearch mean median sum reverse range statistics algorithms">
                                     <div class="ref-card-header">
                                         <h4>Algorithms &amp; Statistics</h4>
                                         <span class="topic-tag">Algorithms</span>
                                     </div>
-                                    <p class="ref-desc">Fast standard library routines: <code>sort</code>, <code>mean</code>, <code>median</code>, <code>sum</code>, <code>reverse</code>, <code>range</code>, <code>binarySearch</code>.</p>
+                                    <p class="ref-desc">Fast standard routines: <code>sort</code>, <code>mean</code>, <code>median</code>, <code>sum</code>, <code>reverse</code>, <code>range</code>, <code>binarySearch</code>.</p>
                                     <code>let nums = [42, 17, 88, 3, 99, 12];&#10;print(&quot;Original: &quot; + str(nums));&#10;print(&quot;Sorted:   &quot; + str(sort(nums)));&#10;print(&quot;Mean:     &quot; + str(mean(nums)));&#10;print(&quot;Median:   &quot; + str(median(nums)));</code>
                                     <button class="insert-snippet-btn" data-snippet="let nums = [42, 17, 88, 3, 99, 12];&#10;print(&quot;Original: &quot; + str(nums));&#10;print(&quot;Sorted:   &quot; + str(sort(nums)));&#10;print(&quot;Mean:     &quot; + str(mean(nums)));&#10;print(&quot;Median:   &quot; + str(median(nums)));">Insert into Compiler</button>
                                 </div>
 
-                                <!-- Card 12: Math Built-ins -->
-                                <div class="ref-card" data-keywords="math number float integer sqrt pow abs round random sin cos">
+                                <!-- 20. Mathematical Built-ins -->
+                                <div class="ref-card" data-keywords="math number float integer sqrt pow abs round floor ceil sin cos random math">
                                     <div class="ref-card-header">
                                         <h4>Mathematical Built-ins</h4>
                                         <span class="topic-tag">Math</span>
                                     </div>
                                     <p class="ref-desc">Built-in numeric functions: <code>sqrt</code>, <code>pow</code>, <code>abs</code>, <code>round</code>, <code>floor</code>, <code>ceil</code>, <code>sin</code>, <code>cos</code>, <code>random</code>.</p>
-                                    <code>print(&quot;Square root 256: &quot; + str(sqrt(256)));&#10;print(&quot;2 to power 10:   &quot; + str(pow(2, 10)));&#10;print(&quot;Round 4.75:      &quot; + str(round(4.75)));</code>
-                                    <button class="insert-snippet-btn" data-snippet="print(&quot;Square root 256: &quot; + str(sqrt(256)));&#10;print(&quot;2 to power 10:   &quot; + str(pow(2, 10)));&#10;print(&quot;Round 4.75:      &quot; + str(round(4.75)));">Insert into Compiler</button>
+                                    <code>print(&quot;Square root 256: &quot; + str(sqrt(256)));&#10;print(&quot;2 to power 10:   &quot; + str(pow(2, 10)));&#10;print(&quot;Round 4.75:      &quot; + str(round(4.75)));&#10;print(&quot;Random in [0,1): &quot; + str(random()));</code>
+                                    <button class="insert-snippet-btn" data-snippet="print(&quot;Square root 256: &quot; + str(sqrt(256)));&#10;print(&quot;2 to power 10:   &quot; + str(pow(2, 10)));&#10;print(&quot;Round 4.75:      &quot; + str(round(4.75)));&#10;print(&quot;Random in [0,1): &quot; + str(random()));">Insert into Compiler</button>
                                 </div>
                             </div>
                         </div>
