@@ -17,6 +17,7 @@ public class CallFrame {
     public final Bytecode bytecode;
     public int ip = 0; // instruction pointer
     public final List<Value> locals = new ArrayList<>();
+    public MLInstance initInstance = null; // Set when invoking class constructor (init)
 
     public CallFrame(String functionName, Bytecode bytecode) {
         this.functionName = functionName;

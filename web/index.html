@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiniLang 2.0 Studio | Interactive Playground &amp; Visual VM</title>
+    <meta name="description" content="Next-generation high-performance educational language playground. Featuring Python-like OOP, safe memory, kid-friendly English syntax, and bytecode VM.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="navbar">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <span>λ</span>
+                </div>
+                <div class="brand-info">
+                    <span class="brand-title">MiniLang <span class="badge-version">2.0</span></span>
+                    <span class="brand-subtitle">Interactive Bytecode Studio</span>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <div class="preset-selector">
+                    <label for="example-select" class="visually-hidden">Select Example</label>
+                    <span class="selector-icon">⚡</span>
+                    <select id="example-select" aria-label="Load code example">
+                        <option value="dicts_fileio">✨ Dictionaries &amp; File I/O (New)</option>
+                        <option value="try_catch">🛡️ Safe Try / Catch (New)</option>
+                        <option value="multiline_str">📜 Multi-line Strings (New)</option>
+                        <option value="kid_friendly">🧸 Kid-Friendly English Syntax</option>
+                        <option value="oop_classes">🚀 Pythonic OOP &amp; Particles</option>
+                        <option value="algorithms">⚡ High-Speed Algorithms &amp; Sort</option>
+                        <option value="turtle_art">🎨 Turtle &amp; ASCII Canvas</option>
+                    </select>
+                </div>
+
+                <button id="run-btn" class="btn btn-primary" title="Execute script (Ctrl+Enter)">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Run Script</span>
+                    <kbd class="shortcut-kbd">Ctrl+↵</kbd>
+                </button>
+
+                <button id="bytecode-btn" class="btn btn-secondary" title="Compile and view disassembled bytecode">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    <span>Bytecode</span>
+                </button>
+
+                <button id="ast-btn" class="btn btn-secondary" title="View Abstract Syntax Tree">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="5" r="3"></circle>
+                        <circle cx="5" cy="19" r="3"></circle>
+                        <circle cx="19" cy="19" r="3"></circle>
+                        <line x1="12" y1="8" x2="5" y2="16"></line>
+                        <line x1="12" y1="8" x2="19" y2="16"></line>
+                    </svg>
+                    <span>AST</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="workspace">
+            <!-- Left: Code Editor Pane -->
+            <section class="editor-pane" aria-label="Code Editor">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span class="file-icon">📄</span>
+                        <span id="active-filename">main.ml</span>
+                        <span class="badge-lang">MiniLang 2.0</span>
+                    </div>
+                    <div class="panel-tools">
+                        <button id="format-btn" class="icon-btn" title="Clear Code">
+                            <span>🧹 Clear</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="editor-wrapper">
+                    <div class="line-numbers" id="line-numbers" aria-hidden="true">1</div>
+                    <textarea id="code-editor" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Write MiniLang code here..."></textarea>
+                </div>
+
+                <div class="editor-footer">
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span id="editor-status">Ready</span>
+                    </div>
+                    <div class="cursor-info">
+                        <span id="cursor-pos">Ln 1, Col 1</span>
+                        <span class="separator">•</span>
+                        <span id="char-count">0 chars</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right: Output & Inspection Pane -->
+            <section class="output-pane" aria-label="Console and Inspection">
+                <div class="tab-bar">
+                    <button class="tab-btn active" data-tab="console-view">
+                        <span class="tab-icon">💻</span>
+                        <span>Console Output</span>
+                        <span id="output-badge" class="tab-badge">0</span>
+                    </button>
+                    <button class="tab-btn" data-tab="bytecode-view">
+                        <span class="tab-icon">⚙️</span>
+                        <span>Bytecode VM</span>
+                    </button>
+                    <button class="tab-btn" data-tab="ast-view">
+                        <span class="tab-icon">🌳</span>
+                        <span>Syntax Tree</span>
+                    </button>
+                    <button class="tab-btn" data-tab="cheat-view">
+                        <span class="tab-icon">📖</span>
+                        <span>Quick Reference</span>
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- Tab 1: Console View -->
+                    <div id="console-view" class="tab-panel active">
+                        <div class="console-toolbar">
+                            <div class="metrics">
+                                <span id="metric-status" class="metric-pill success">Idle</span>
+                                <span id="metric-time" class="metric-pill">0.00 ms</span>
+                                <span class="metric-pill info">Memory Safe</span>
+                            </div>
+                            <button id="clear-console-btn" class="icon-btn" title="Clear Console">
+                                <span>Clear</span>
+                            </button>
+                        </div>
+                        <pre id="console-output" class="terminal-view"><span class="terminal-intro">👋 Welcome to MiniLang 2.0 Web Studio!
+Press "Run Script" (or Ctrl+Enter) to execute your program.</span></pre>
+                    </div>
+
+                    <!-- Tab 2: Bytecode Disassembly -->
+                    <div id="bytecode-view" class="tab-panel">
+                        <div class="console-toolbar">
+                            <span class="panel-subtitle">Virtual Machine Instruction Disassembly</span>
+                            <button id="copy-bytecode-btn" class="icon-btn" title="Copy Bytecode">Copy</button>
+                        </div>
+                        <pre id="bytecode-output" class="terminal-view code-font">// Click "Bytecode" or "Run" to view VM instructions.</pre>
+                    </div>
+
+                    <!-- Tab 3: AST View -->
+                    <div id="ast-view" class="tab-panel">
+                        <div class="console-toolbar">
+                            <span class="panel-subtitle">Hierarchical Abstract Syntax Tree</span>
+                            <button id="copy-ast-btn" class="icon-btn" title="Copy AST">Copy</button>
+                        </div>
+                        <pre id="ast-output" class="terminal-view code-font">// Click "AST" to inspect parsed AST statements.</pre>
+                    </div>
+
+                    <!-- Tab 4: Cheatsheet / Reference -->
+                    <div id="cheat-view" class="tab-panel">
+                        <div class="reference-content">
+                            <h3>MiniLang 2.0 Syntax Quick Reference</h3>
+                            <div class="reference-grid">
+                                <div class="ref-card">
+                                    <h4>Dictionaries (HashMaps)</h4>
+                                    <code>let user = { "name": "Alice", "age": 20 };<br>user["role"] = "Admin";<br>print(has(user, "name"));<br>print(keys(user));</code>
+                                    <button class="insert-snippet-btn" data-snippet="let user = { &quot;name&quot;: &quot;Alice&quot;, &quot;score&quot;: 100 };&#10;user[&quot;rank&quot;] = &quot;Pro&quot;;&#10;print(&quot;User keys: &quot; + str(keys(user)));&#10;print(&quot;Score: &quot; + str(user[&quot;score&quot;]));">Insert</button>
+                                </div>
+
+                                <div class="ref-card">
+                                    <h4>Try / Catch Exception Handling</h4>
+                                    <code>try {<br>&nbsp;&nbsp;let x = 10 / 0;<br>} catch (err) {<br>&nbsp;&nbsp;print("Caught error: " + err);<br>}</code>
+                                    <button class="insert-snippet-btn" data-snippet="try {&#10;    let res = 10 / 0;&#10;} catch (e) {&#10;    print(&quot;Successfully caught error: &quot; + e);&#10;}">Insert</button>
+                                </div>
+
+                                <div class="ref-card">
+                                    <h4>Multi-line Strings</h4>
+                                    <code>let banner = """<br>╔═════════════════╗<br>║ MiniLang 2.0    ║<br>╚═════════════════╝<br>""";<br>print(banner);</code>
+                                    <button class="insert-snippet-btn" data-snippet="let art = &quot;&quot;&quot;&#10;  /\_/\  &#10; ( o.o ) &#10;  > ^ <  &#10;&quot;&quot;&quot;;&#10;print(art);">Insert</button>
+                                </div>
+
+                                <div class="ref-card">
+                                    <h4>Kid-Friendly English Syntax</h4>
+                                    <code>let count = 0;<br>add 5 to count;<br>multiply count by 2;<br>repeat 3 times {<br>&nbsp;&nbsp;say "Hello!";<br>}</code>
+                                    <button class="insert-snippet-btn" data-snippet="let score = 10;&#10;add 5 to score;&#10;multiply score by 2;&#10;show &quot;Final score: &quot; + str(score);&#10;repeat 3 times {&#10;    say &quot;MiniLang is fun!&quot;;&#10;}">Insert</button>
+                                </div>
+
+                                <div class="ref-card">
+                                    <h4>Object-Oriented Classes</h4>
+                                    <code>class Point {<br>&nbsp;&nbsp;init(x, y) {<br>&nbsp;&nbsp;&nbsp;&nbsp;this.x = x;<br>&nbsp;&nbsp;&nbsp;&nbsp;this.y = y;<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;show() {<br>&nbsp;&nbsp;&nbsp;&nbsp;print("(" + str(this.x) + ")");<br>&nbsp;&nbsp;}<br>}</code>
+                                    <button class="insert-snippet-btn" data-snippet="class Robot {&#10;    init(name) {&#10;        this.name = name;&#10;        this.battery = 100;&#10;    }&#10;    work() {&#10;        this.battery = this.battery - 20;&#10;        print(this.name + &quot; worked! Battery: &quot; + str(this.battery));&#10;    }&#10;}&#10;let r = Robot(&quot;Robo1&quot;);&#10;r.work();">Insert</button>
+                                </div>
+
+                                <div class="ref-card">
+                                    <h4>File I/O Built-ins</h4>
+                                    <code>writeFile("test.txt", "Hello!");<br>let content = readFile("test.txt");<br>appendFile("test.txt", " World");<br>deleteFile("test.txt");</code>
+                                    <button class="insert-snippet-btn" data-snippet="writeFile(&quot;demo.txt&quot;, &quot;Hello from MiniLang 2.0!\n&quot;);&#10;appendFile(&quot;demo.txt&quot;, &quot;Appended line.\n&quot;);&#10;print(readFile(&quot;demo.txt&quot;));&#10;deleteFile(&quot;demo.txt&quot;);">Insert</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,42 +1,54 @@
-=== MINILANG REVERSE-ENGINEERING REPORT ===
+=== MINILANG REVERSE-ENGINEERING & ARCHITECTURE REPORT (UPDATED) ===
 
-1. ARCHITECTURE: Toy compiler pipeline (Source -> Lexer -> Parser -> Compiler -> VM -> Output). Only Lexer and Parser fully implemented. Compiler.java and VM.java are MISSING. Main.java only runs lexer, not full pipeline.
+1. ARCHITECTURE STATUS: COMPLETE & FULLY OPERATIONAL PIPELINE
+   The entire pipeline is fully implemented and operational:
+   Source (.ml) or REPL -> Lexer -> Parser -> Compiler (with Optimization) -> Stack VM -> Rendering / Console Output.
 
-2. FILE-BY-FILE:
-- Main.java: Incomplete entry point (only tokenizes, ignores args flags)
-- lexer/*: Complete (Lexer, Token, TokenType)
-- parser/*: Complete (Parser, Expr, Stmt)
-- compiler/*: Partial (Opcode, Instruction, Bytecode exist; Compiler.java MISSING)
-- vm/*: Partial (Value, CallFrame, RuntimeError exist; VM.java MISSING)
-- pom.xml: Maven build, JUnit test dependency, shade plugin
-- README.md: Documents full pipeline that doesn't exist in code
+2. FILE-BY-FILE STATUS:
+   - Main.java: COMPLETE
+     - Interactive REPL: java -jar target/minilang-1.0-SNAPSHOT.jar --repl
+     - Web Studio IDE: java -jar target/minilang-1.0-SNAPSHOT.jar --web 8080
+     - Token stream inspection: --tokens <file.ml>
+     - AST structure inspection: --ast <file.ml>
+     - Bytecode disassembly: --bytecode <file.ml>
+     - Full pipeline execution: <file.ml>
+   - lexer/*: COMPLETE
+     - Lexer.java, Token.java, TokenType.java
+     - Kid-friendly keyword mappings: say, show, def, function, repeat, in, and, or, not, is
+     - Exception handling keywords: try, catch
+     - Multi-line strings: """ ... """ raw strings
+   - parser/*: COMPLETE
+     - Parser.java + AST nodes (Repeat.java, ForEach.java, MapLiteral.java, TryCatch.java, ImportStmt.java, etc.)
+     - Forgiving syntax: optional semicolons, auto-variable assignments, parentheses-free conditionals
+   - compiler/*: COMPLETE (Compiler.java IS IMPLEMENTED)
+     - Compiler.java: Two-pass compiler, AST-level constant folding optimization, loop backpatching, variable slot allocation, exception handler backpatching
+     - Opcode.java, Instruction.java, Bytecode.java, FunctionInfo.java, Program.java (added BUILD_MAP, PUSH_TRY, POP_TRY)
+   - vm/*: COMPLETE (VM.java IS IMPLEMENTED)
+     - VM.java: Stack machine with operand evaluation, call frame stack, recursion limit (MAX_CALL_STACK_DEPTH = 1000), frame local variable cleanup (memory leak prevention)
+     - Exception handling: ExceptionHandler stack, call-stack unwinding, safe frame memory disposal
+     - MLClass.java, MLInstance.java, BoundMethod.java, Builtins.java, Value hierarchy (IntValue, FloatValue, BoolValue, StringValue, ArrayValue, MapValue, NullValue)
+     - Standard built-in File I/O: readFile, writeFile, appendFile, fileExists, deleteFile
+     - Standard built-in Dictionaries: has, keys, values, len
+   - web/*: COMPLETE
+     - WebServer.java: Embedded HTTP server with virtual threads, live execution /api/run, /api/disassemble, /api/ast
+     - Web Studio IDE: Modern dark UI (HTML5, Vanilla CSS, JS) with live editor, terminal output, and opcode inspector
+   - algo/*: COMPLETE
+     - AlgoLib.java: range(), sum(), mean(), median(), sort(), reverse(), binarySearch()
+   - plot/*: COMPLETE
+     - PlotEngine.java: 2D line, scatter, and bar charts with auto-scaling, Swing window, and PNG file export
+   - turtle/*: COMPLETE
+     - TurtleEngine.java: Interactive Logo-style vector turtle graphics with PNG export
+   - graphics/*: COMPLETE
+     - GraphicsWindow.java: Hardware-accelerated 2D OpenGL immediate mode with input event polling
+   - pom.xml: COMPLETE
+     - Java 21, JUnit Jupiter 5.10.2, Maven Shade plugin for standalone executable JAR
+   - README.md: COMPLETE & UP-TO-DATE
+   - explanation.md: COMPLETE TECHNICAL DEEP DIVE
 
-3. RUNTIME FLOW: Source file -> Lexer.tokenize() -> List<Token> -> Main prints tokens. Parser/Compiler/VM never invoked.
+3. RUNTIME FLOW:
+   Source String -> Lexer -> List<Token> -> Parser -> List<Stmt> AST -> Compiler -> Program Bytecode -> VM Execution -> Output
 
-4. API FLOW: CLI only: java minilang.Main <file.ml>. Debug flags (--tokens, --ast, --bytecode) unimplemented.
-
-5. DATA FLOW: Source string -> Tokens -> (intended) AST -> Bytecode -> Execution.
-
-6. FRONTEND/BACKEND: None. CLI-only educational tool.
-
-7. DEPENDENCIES: Java 21+, Maven, JUnit Jupiter 5.10.2 (test), Maven Shade Plugin.
-
-8. AUTH/SECURITY: None. No sandbox, no validation, direct file reads.
-
-9. BUILD/DEPLOY: mvn compile / mvn package. Main class: minilang.Main.
-
-10. DEAD/SUSPICIOUS: README overstates capabilities. f1.ml contains inappropriate content. Lexer assigns EQUAL to both = and ==.
-
-11. BUGS/DEBT:
-- Main.java doesn't use Parser/Compiler/VM
-- Compiler.java MISSING
-- VM.java MISSING
-- No tests in src/test/
-- Parser has potential ClassCastException
-- No error recovery
-
-12. FILES TO UNDERSTAND BEFORE MODIFYING:
-Main.java, Lexer.java, TokenType.java, Parser.java, Expr.java, Stmt.java, Opcode.java
-
-13. EXPLANATION FOR NEW TEAM MEMBER:
-MiniLang is an educational toy language inspired by Crafting Interpreters. The lexer and parser are complete and working. The compiler and VM do not exist yet — you need to implement them to make the language execute. Main.java currently only prints tokens. Start by reading Main.java, then Lexer, Parser, and the compiler/VM structures.
+4. VERIFICATION:
+   - Automated tests: 49 unit tests passing in src/test/ (mvn test)
+   - Executable JAR: target/minilang-1.0-SNAPSHOT.jar
+   - Web Studio: java -jar target/minilang-1.0-SNAPSHOT.jar --web 8080 (http://localhost:8080)

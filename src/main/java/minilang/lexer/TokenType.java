@@ -2,28 +2,20 @@ package minilang.lexer;
 
 /**
  * TokenType enumerates every kind of token the MiniLang lexer can emit.
- *
- * Why an enum: tokens are a fixed, small set of categories. An enum gives
- * exhaustiveness checks in the parser and compiler, and makes the token
- * stream easy to inspect in debug output.
- *
- * Categories:
- *  - single-character punctuation: LPAREN, RPAREN, LBRACE, RBRACE, SEMICOLON, COMMA
- *  - multi-character operators: PLUS, MINUS, STAR, SLASH, PERCENT
- *    EQ, BANG_EQ, LT, LE, GT, GE, AND, OR
- *  - literals: INTEGER, STRING, TRUE, FALSE
- *  - identifiers and keywords: IDENTIFIER, LET, IF, ELSE, WHILE, FN, RETURN, PRINT
- *  - EOF marks end of input
  */
 public enum TokenType {
 
-    // ── single-character punctuation ──────────────────────────────────────
+    // ── punctuation ───────────────────────────────────────────────────────
     LPAREN,        // (
     RPAREN,        // )
     LBRACE,        // {
     RBRACE,        // }
+    LBRACKET,      // [
+    RBRACKET,      // ]
     SEMICOLON,     // ;
+    COLON,         // :
     COMMA,         // ,
+    DOT,           // .
 
     // ── operators ────────────────────────────────────────────────────────
     PLUS,          // +
@@ -33,6 +25,7 @@ public enum TokenType {
     PERCENT,       // %
 
     EQUAL,         // =
+    EQ,            // ==
     BANG,          // !
     BANG_EQ,       // !=
     LT,            // <
@@ -44,6 +37,7 @@ public enum TokenType {
 
     // ── literals ─────────────────────────────────────────────────────────
     INTEGER,       // 42
+    FLOAT,         // 3.14
     STRING,        // "hello"
 
     // ── keywords ─────────────────────────────────────────────────────────
@@ -51,11 +45,22 @@ public enum TokenType {
     IF,            // if
     ELSE,          // else
     WHILE,         // while
+    FOR,           // for
+    BREAK,         // break
+    CONTINUE,      // continue
+    CLASS,         // class
+    THIS,          // this
+    SELF,          // self
     FN,            // fn
     RETURN,        // return
-    PRINT,         // print
+    PRINT,         // print, say, show
     TRUE,          // true
     FALSE,         // false
+    IMPORT,        // import
+    REPEAT,        // repeat, loop
+    IN,            // in
+    TRY,           // try
+    CATCH,         // catch
 
     // ── identifier ───────────────────────────────────────────────────────
     IDENTIFIER,    // variable / function names

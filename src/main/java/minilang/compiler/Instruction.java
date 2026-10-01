@@ -2,9 +2,6 @@ package minilang.compiler;
 
 /**
  * Instruction is a single bytecode instruction with an opcode and optional argument.
- *
- * For simplicity this project uses an instruction object rather than raw bytes,
- * which makes the disassembler and compiler much easier to read.
  */
 public record Instruction(Opcode opcode, int argument) {
     public Instruction(Opcode opcode) {
@@ -15,7 +12,11 @@ public record Instruction(Opcode opcode, int argument) {
     public String toString() {
         if (argument != 0 || opcode == Opcode.PUSH_CONST || opcode == Opcode.LOAD_LOCAL
                 || opcode == Opcode.STORE_LOCAL || opcode == Opcode.JUMP
-                || opcode == Opcode.JUMP_IF_FALSE || opcode == Opcode.CALL) {
+                || opcode == Opcode.JUMP_IF_FALSE || opcode == Opcode.CALL
+                || opcode == Opcode.BUILD_ARRAY || opcode == Opcode.CALL_BUILTIN
+                || opcode == Opcode.CLASS || opcode == Opcode.METHOD
+                || opcode == Opcode.GET_PROPERTY || opcode == Opcode.SET_PROPERTY
+                || opcode == Opcode.CALL_VALUE) {
             return opcode + " " + argument;
         }
         return opcode.toString();
